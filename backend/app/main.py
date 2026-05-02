@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
-from app.routers import auth, users
+from app.routers import auth, users, transportistas, dadores, vehiculos, documentos, admin
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +32,11 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(users.router, prefix="/api/v1")
+app.include_router(transportistas.router, prefix="/api/v1")
+app.include_router(dadores.router, prefix="/api/v1")
+app.include_router(vehiculos.router, prefix="/api/v1")
+app.include_router(documentos.router, prefix="/api/v1")
+app.include_router(admin.router, prefix="/api/v1")
 
 
 @app.exception_handler(Exception)
