@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, date
 
-from sqlalchemy import Boolean, Date, DateTime, Decimal, Enum, ForeignKey, Index, Integer, String, Text, func
+from sqlalchemy import Boolean, Date, DateTime, Numeric, Enum, ForeignKey, Index, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -32,7 +32,7 @@ class TransportistaProfile(Base):
     ruta_vencimiento: Mapped[date | None] = mapped_column(Date)
     radio_operacion_km: Mapped[int] = mapped_column(Integer, default=500)
     bio: Mapped[str | None] = mapped_column(Text)
-    rating_promedio: Mapped[float] = mapped_column(Decimal(3, 2), default=0)
+    rating_promedio: Mapped[float] = mapped_column(Numeric(3, 2), default=0)
     cantidad_viajes: Mapped[int] = mapped_column(Integer, default=0)
     suscripcion_activa: Mapped[bool] = mapped_column(Boolean, default=False)
     suscripcion_vence_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -62,7 +62,7 @@ class DadorProfile(Base):
     ciudad: Mapped[str | None] = mapped_column(String(100))
     provincia: Mapped[str | None] = mapped_column(String(100))
     cantidad_publicaciones: Mapped[int] = mapped_column(Integer, default=0)
-    rating_promedio: Mapped[float] = mapped_column(Decimal(3, 2), default=0)
+    rating_promedio: Mapped[float] = mapped_column(Numeric(3, 2), default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
