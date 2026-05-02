@@ -11,6 +11,6 @@ python-jose[cryptography]==3.3.0
 python-multipart==0.0.17
 httpx==0.28.1
 resend
-cloudinary==1.41.3
-sentry-sdk[fastapi]==2.19.0
+cloudinary==1.44.2
+sentry-sdk[fastapi]
 apscheduler==3.10.4
