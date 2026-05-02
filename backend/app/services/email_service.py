@@ -6,8 +6,8 @@ resend.api_key = settings.RESEND_API_KEY
 
 
 def enviar_verificacion_email(email: str, nombre: str, token: str) -> None:
-    if settings.ENVIRONMENT == "development":
-        print(f"[DEV] Verificar email: {settings.FRONTEND_URL}/verificar-email?token={token}")
+    if settings.ENVIRONMENT == "development" or not settings.RESEND_API_KEY:
+        print(f"[EMAIL] Verificar email: {settings.FRONTEND_URL}/verificar-email?token={token}")
         return
 
     resend.Emails.send({
@@ -29,8 +29,8 @@ def enviar_verificacion_email(email: str, nombre: str, token: str) -> None:
 
 
 def enviar_reset_password(email: str, nombre: str, token: str) -> None:
-    if settings.ENVIRONMENT == "development":
-        print(f"[DEV] Reset password: {settings.FRONTEND_URL}/reset-password?token={token}")
+    if settings.ENVIRONMENT == "development" or not settings.RESEND_API_KEY:
+        print(f"[EMAIL] Reset password: {settings.FRONTEND_URL}/reset-password?token={token}")
         return
 
     resend.Emails.send({
