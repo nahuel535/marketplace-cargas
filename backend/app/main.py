@@ -1,8 +1,14 @@
-from fastapi import FastAPI
+import logging
+import traceback
+
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.routers import auth, users
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Marketplace de Cargas API",
@@ -26,6 +32,12 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(users.router, prefix="/api/v1")
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    logger.error("Error no manejado: %s\n%s", exc, traceback.format_exc())
+    return JSONResponse(status_code=500, content={"detail": "Error interno del servidor"})
 
 
 @app.get("/health")
