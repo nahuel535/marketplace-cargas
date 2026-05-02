@@ -10,7 +10,7 @@ passlib[bcrypt]==1.7.4
 python-jose[cryptography]==3.3.0
 python-multipart==0.0.17
 httpx==0.28.1
-resend==2.5.0
+resend
 cloudinary==1.41.3
 sentry-sdk[fastapi]==2.19.0
 apscheduler==3.10.4
