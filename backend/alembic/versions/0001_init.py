@@ -18,18 +18,28 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.execute("CREATE EXTENSION IF NOT EXISTS pgcrypto")
 
+    # IF NOT EXISTS no existe para ENUMs en Postgres — usamos DO block
     op.execute("""
-        CREATE TYPE user_role AS ENUM ('dador', 'transportista', 'admin')
+        DO $$ BEGIN
+            CREATE TYPE user_role AS ENUM ('dador', 'transportista', 'admin');
+        EXCEPTION WHEN duplicate_object THEN NULL;
+        END $$
     """)
     op.execute("""
-        CREATE TYPE user_status AS ENUM (
-            'pendiente_verificacion', 'verificado', 'suspendido', 'rechazado'
-        )
+        DO $$ BEGIN
+            CREATE TYPE user_status AS ENUM (
+                'pendiente_verificacion', 'verificado', 'suspendido', 'rechazado'
+            );
+        EXCEPTION WHEN duplicate_object THEN NULL;
+        END $$
     """)
     op.execute("""
-        CREATE TYPE persona_tipo AS ENUM (
-            'particular', 'monotributista', 'responsable_inscripto', 'empresa'
-        )
+        DO $$ BEGIN
+            CREATE TYPE persona_tipo AS ENUM (
+                'particular', 'monotributista', 'responsable_inscripto', 'empresa'
+            );
+        EXCEPTION WHEN duplicate_object THEN NULL;
+        END $$
     """)
 
     op.create_table(
@@ -40,10 +50,10 @@ def upgrade() -> None:
         sa.Column("telefono", sa.String(30)),
         sa.Column("nombre", sa.String(100), nullable=False),
         sa.Column("apellido", sa.String(100)),
-        sa.Column("rol", sa.Enum("dador", "transportista", "admin", name="user_role"), nullable=False),
+        sa.Column("rol", sa.Enum("dador", "transportista", "admin", name="user_role", create_type=False), nullable=False),
         sa.Column("status", sa.Enum(
             "pendiente_verificacion", "verificado", "suspendido", "rechazado",
-            name="user_status"
+            name="user_status", create_type=False
         ), nullable=False, server_default="pendiente_verificacion"),
         sa.Column("avatar_url", sa.Text()),
         sa.Column("email_verificado", sa.Boolean(), server_default="false"),
@@ -60,7 +70,7 @@ def upgrade() -> None:
         sa.Column("user_id", sa.UUID(), sa.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True),
         sa.Column("cuit", sa.String(13), unique=True, nullable=False),
         sa.Column("razon_social", sa.String(200)),
-        sa.Column("tipo", sa.Enum("particular", "monotributista", "responsable_inscripto", "empresa", name="persona_tipo"), nullable=False),
+        sa.Column("tipo", sa.Enum("particular", "monotributista", "responsable_inscripto", "empresa", name="persona_tipo", create_type=False), nullable=False),
         sa.Column("domicilio", sa.Text()),
         sa.Column("ciudad", sa.String(100)),
         sa.Column("provincia", sa.String(100)),
@@ -83,7 +93,7 @@ def upgrade() -> None:
         sa.Column("user_id", sa.UUID(), sa.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True),
         sa.Column("cuit_dni", sa.String(13), nullable=False),
         sa.Column("razon_social", sa.String(200)),
-        sa.Column("tipo", sa.Enum("particular", "monotributista", "responsable_inscripto", "empresa", name="persona_tipo"), nullable=False),
+        sa.Column("tipo", sa.Enum("particular", "monotributista", "responsable_inscripto", "empresa", name="persona_tipo", create_type=False), nullable=False),
         sa.Column("sector", sa.String(100)),
         sa.Column("ciudad", sa.String(100)),
         sa.Column("provincia", sa.String(100)),
