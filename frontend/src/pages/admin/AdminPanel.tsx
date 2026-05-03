@@ -6,7 +6,7 @@ import type { Documento } from "../../lib/api-tipos";
 import type { User } from "../../types";
 
 export default function AdminPanel() {
-  const { user, logout } = useAuthStore();
+  const { logout } = useAuthStore();
   const [tab, setTab] = useState<"usuarios" | "documentos">("documentos");
   const [usuarios, setUsuarios] = useState<User[]>([]);
   const [documentos, setDocumentos] = useState<Documento[]>([]);

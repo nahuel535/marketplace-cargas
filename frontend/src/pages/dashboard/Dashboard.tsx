@@ -16,7 +16,6 @@ export default function Dashboard() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [perfilCompleto, setPerfilCompleto] = useState(false);
   const [transportistaData, setTransportistaData] = useState<{
     perfil: TransportistaProfile | null;
     vehiculos: Vehiculo[];
@@ -46,7 +45,7 @@ export default function Dashboard() {
           vehiculos: veicRes?.data ?? [],
           documentos: docsRes?.data ?? [],
         });
-        setPerfilCompleto(true);
+
       } else if (user.rol === "dador") {
         const res = await api.get("/dadores/me").catch(() => null);
         if (!res) {
@@ -54,7 +53,7 @@ export default function Dashboard() {
           return;
         }
         setDadorData(res.data);
-        setPerfilCompleto(true);
+
       } else if (user.rol === "admin") {
         navigate("/admin");
         return;

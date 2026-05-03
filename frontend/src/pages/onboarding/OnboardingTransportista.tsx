@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { CheckCircle, ChevronRight, Truck, FileText, Car } from "lucide-react";
 import api from "../../lib/api";
-import { PROVINCIAS_AR, VEHICULO_TIPO_LABELS, type VehiculoTipo } from "../../lib/api-tipos";
+import { PROVINCIAS_AR, VEHICULO_TIPO_LABELS } from "../../lib/api-tipos";
 
 // ── Schemas ──────────────────────────────────────────────────────────────────
 const schemaPerfil = z.object({
@@ -25,8 +25,8 @@ const schemaVehiculo = z.object({
   modelo: z.string().optional(),
   anio: z.number().min(1980).max(2030).optional(),
   capacidad_kg: z.number().min(100, "Ingresá la capacidad"),
-  refrigerado: z.boolean().default(false),
-  tiene_hidrogrua: z.boolean().default(false),
+  refrigerado: z.boolean(),
+  tiene_hidrogrua: z.boolean(),
 });
 
 type PerfilData = z.infer<typeof schemaPerfil>;
