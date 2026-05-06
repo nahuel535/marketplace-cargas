@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   Truck, Search, MapPin, Star, Package, ChevronRight,
-  Shield, Clock, ArrowRight, Users, CheckCircle,
+  Shield, Clock, ArrowRight, Users, CheckCircle, ArrowDown,
 } from "lucide-react";
 import api from "../../lib/api";
 import { PROVINCIAS_AR, VEHICULO_TIPO_LABELS } from "../../lib/api-tipos";
@@ -25,9 +25,12 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [transportistas, setTransportistas] = useState<TransportistaPublico[]>([]);
   const [loading, setLoading] = useState(false);
-  const [provincia, setProvincia] = useState("");
-  const [tipoVehiculo, setTipoVehiculo] = useState("");
   const [buscado, setBuscado] = useState(false);
+  const [origenProvincia, setOrigenProvincia] = useState("");
+  const [origenCiudad, setOrigenCiudad] = useState("");
+  const [destinoProvincia, setDestinoProvincia] = useState("");
+  const [destinoCiudad, setDestinoCiudad] = useState("");
+  const [tipoCarga, setTipoCarga] = useState("");
 
   useEffect(() => {
     buscar();
@@ -38,8 +41,8 @@ export default function LandingPage() {
     setBuscado(true);
     try {
       const params = new URLSearchParams();
-      if (provincia) params.set("provincia", provincia);
-      if (tipoVehiculo) params.set("tipo_vehiculo", tipoVehiculo);
+      if (origenProvincia) params.set("provincia", origenProvincia);
+      if (tipoCarga) params.set("tipo_carga", tipoCarga);
       const res = await api.get(`/transportistas/publico?${params.toString()}`);
       setTransportistas(res.data);
     } catch {
@@ -47,6 +50,15 @@ export default function LandingPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const limpiarFiltros = () => {
+    setOrigenProvincia("");
+    setOrigenCiudad("");
+    setDestinoProvincia("");
+    setDestinoCiudad("");
+    setTipoCarga("");
+    setTimeout(buscar, 0);
   };
 
   return (
@@ -95,50 +107,83 @@ export default function LandingPage() {
             </p>
 
             {/* Search box */}
-            <div className="bg-white rounded-2xl p-4 shadow-2xl shadow-black/40">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-1">
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Provincia</label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <select
-                      value={provincia}
-                      onChange={e => setProvincia(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50 cursor-pointer"
-                    >
-                      <option value="">Todas las provincias</option>
-                      {PROVINCIAS_AR.map(p => <option key={p} value={p}>{p}</option>)}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="flex-1">
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Tipo de vehículo</label>
-                  <div className="relative">
-                    <Truck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <select
-                      value={tipoVehiculo}
-                      onChange={e => setTipoVehiculo(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50 cursor-pointer"
-                    >
-                      <option value="">Cualquier vehículo</option>
-                      {Object.entries(VEHICULO_TIPO_LABELS).map(([v, l]) => (
-                        <option key={v} value={v}>{l}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="flex items-end">
-                  <button
-                    onClick={buscar}
-                    disabled={loading}
-                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors duration-200 disabled:opacity-60 cursor-pointer"
+            <div className="bg-white rounded-2xl p-5 shadow-2xl shadow-black/40 space-y-3">
+              {/* Fila origen */}
+              <div>
+                <p className="text-xs font-bold text-primary-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5" /> Origen
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  <select
+                    value={origenProvincia}
+                    onChange={e => setOrigenProvincia(e.target.value)}
+                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50 cursor-pointer"
                   >
-                    <Search className="w-4 h-4" />
-                    Buscar
-                  </button>
+                    <option value="">Provincia de origen</option>
+                    {PROVINCIAS_AR.map(p => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                  <input
+                    value={origenCiudad}
+                    onChange={e => setOrigenCiudad(e.target.value)}
+                    placeholder="Ciudad de origen"
+                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50 placeholder:text-gray-400"
+                  />
                 </div>
+              </div>
+
+              {/* Separador */}
+              <div className="flex items-center gap-2 text-gray-300">
+                <div className="flex-1 h-px bg-gray-100" />
+                <ArrowDown className="w-4 h-4 text-primary-400" />
+                <div className="flex-1 h-px bg-gray-100" />
+              </div>
+
+              {/* Fila destino */}
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5" /> Destino
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  <select
+                    value={destinoProvincia}
+                    onChange={e => setDestinoProvincia(e.target.value)}
+                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50 cursor-pointer"
+                  >
+                    <option value="">Provincia de destino</option>
+                    {PROVINCIAS_AR.map(p => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                  <input
+                    value={destinoCiudad}
+                    onChange={e => setDestinoCiudad(e.target.value)}
+                    placeholder="Ciudad de destino"
+                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50 placeholder:text-gray-400"
+                  />
+                </div>
+              </div>
+
+              {/* Tipo de carga + botón */}
+              <div className="flex gap-3 pt-1">
+                <div className="relative flex-1">
+                  <Truck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <select
+                    value={tipoCarga}
+                    onChange={e => setTipoCarga(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50 cursor-pointer"
+                  >
+                    <option value="">Tipo de carga</option>
+                    <option value="general">Cargas generales</option>
+                    <option value="refrigerado">Refrigerados</option>
+                    <option value="granos">Granos</option>
+                  </select>
+                </div>
+                <button
+                  onClick={buscar}
+                  disabled={loading}
+                  className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors duration-200 disabled:opacity-60 cursor-pointer shrink-0"
+                >
+                  <Search className="w-4 h-4" />
+                  Buscar
+                </button>
               </div>
             </div>
           </div>
@@ -177,9 +222,9 @@ export default function LandingPage() {
                   : "Sin resultados para esos filtros"
                 : "Transportistas verificados"}
             </h2>
-            {(provincia || tipoVehiculo) && (
+            {(origenProvincia || origenCiudad || destinoProvincia || destinoCiudad || tipoCarga) && (
               <button
-                onClick={() => { setProvincia(""); setTipoVehiculo(""); setTimeout(buscar, 0); }}
+                onClick={limpiarFiltros}
                 className="text-sm text-primary-600 hover:text-primary-700 font-medium cursor-pointer"
               >
                 Limpiar filtros
