@@ -21,12 +21,6 @@ interface TransportistaPublico {
   vehiculos: { id: string; tipo: VehiculoTipo; capacidad_kg: number; refrigerado: boolean; tiene_hidrogrua: boolean }[];
 }
 
-const TIPO_VEHICULO_ICONS: Record<string, string> = {
-  utilitario: "📦", furgon: "🚐", camion_chico: "🚛", camion_grande: "🚚",
-  semi: "🚛", tractor: "🚜", batea: "🚛", tolva: "🚛",
-  cisterna: "🚛", porta_contenedor: "🚢", otro: "🚛",
-};
-
 export default function LandingPage() {
   const navigate = useNavigate();
   const [transportistas, setTransportistas] = useState<TransportistaPublico[]>([]);
