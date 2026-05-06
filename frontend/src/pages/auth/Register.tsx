@@ -87,7 +87,7 @@ export default function Register() {
             <div className="bg-primary-600 p-2 rounded-xl">
               <Truck className="w-6 h-6 text-white" />
             </div>
-            <span className="font-display font-bold text-2xl text-slate-900">FleteYa</span>
+            <span className="font-display font-bold text-2xl text-slate-900">RutaCarga</span>
           </div>
           <p className="text-gray-500 text-sm">Creá tu cuenta gratis</p>
         </div>

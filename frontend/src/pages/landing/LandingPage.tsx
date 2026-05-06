@@ -70,7 +70,7 @@ export default function LandingPage() {
             <div className="bg-primary-600 p-1.5 rounded-lg">
               <Truck className="w-5 h-5 text-white" />
             </div>
-            <span className="font-display font-bold text-gray-900 text-lg">FleteYa</span>
+            <span className="font-display font-bold text-gray-900 text-lg">RutaCarga</span>
           </div>
           <div className="flex items-center gap-3">
             <Link
@@ -341,9 +341,9 @@ export default function LandingPage() {
             <div className="bg-primary-600 p-1 rounded-md">
               <Truck className="w-4 h-4 text-white" />
             </div>
-            <span className="font-display font-bold text-white text-sm">FleteYa</span>
+            <span className="font-display font-bold text-white text-sm">RutaCarga</span>
           </div>
-          <p className="text-slate-500 text-xs">© 2025 FleteYa · Marketplace de cargas Argentina</p>
+          <p className="text-slate-500 text-xs">© 2025 RutaCarga · Marketplace de cargas Argentina</p>
         </div>
       </footer>
     </div>
