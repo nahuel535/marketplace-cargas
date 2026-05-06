@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
-import { Truck } from "lucide-react";
+import { Truck, ArrowLeft } from "lucide-react";
 import api from "../../lib/api";
 import { useAuthStore } from "../../stores/authStore";
 
@@ -41,17 +41,24 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        {/* Back to landing */}
+        <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors">
+          <ArrowLeft className="w-4 h-4" /> Volver al inicio
+        </Link>
+
         <div className="flex flex-col items-center mb-8">
-          <div className="bg-primary-600 p-3 rounded-xl mb-4">
-            <Truck className="w-8 h-8 text-white" />
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-primary-600 p-2 rounded-xl">
+              <Truck className="w-6 h-6 text-white" />
+            </div>
+            <span className="font-display font-bold text-2xl text-slate-900">FleteYa</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Marketplace de Cargas</h1>
-          <p className="text-gray-500 mt-1">Iniciá sesión en tu cuenta</p>
+          <p className="text-gray-500 text-sm">Iniciá sesión en tu cuenta</p>
         </div>
 
-        <div className="card">
+        <div className="card shadow-sm">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label className="label">Email</label>
@@ -66,9 +73,9 @@ export default function Login() {
             </div>
 
             <div>
-              <div className="flex justify-between items-center mb-1">
+              <div className="flex justify-between items-center mb-1.5">
                 <label className="label mb-0">Contraseña</label>
-                <Link to="/forgot-password" className="text-xs text-primary-600 hover:underline">
+                <Link to="/forgot-password" className="text-xs text-primary-600 hover:text-primary-700 font-medium">
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
@@ -83,7 +90,7 @@ export default function Login() {
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
                 {error}
               </div>
             )}
@@ -95,7 +102,7 @@ export default function Login() {
 
           <p className="text-center text-sm text-gray-500 mt-6">
             ¿No tenés cuenta?{" "}
-            <Link to="/register" className="text-primary-600 font-medium hover:underline">
+            <Link to="/register" className="text-primary-600 font-semibold hover:text-primary-700">
               Registrate
             </Link>
           </p>

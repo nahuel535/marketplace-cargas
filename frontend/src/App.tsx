@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import LandingPage from "./pages/landing/LandingPage";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import VerificarEmail from "./pages/auth/VerificarEmail";
@@ -14,6 +15,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verificar-email" element={<VerificarEmail />} />
@@ -23,7 +25,7 @@ export default function App() {
         <Route path="/onboarding/transportista" element={<ProtectedRoute><OnboardingTransportista /></ProtectedRoute>} />
         <Route path="/onboarding/dador" element={<ProtectedRoute><OnboardingDador /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,16 +1,65 @@
 import uuid
 
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, Query
+from sqlalchemy.orm import Session, joinedload
 
 from app.core.deps import get_current_transportista, get_current_user_verificado
 from app.core.exceptions import ConflictoError, NoEncontrado
 from app.database import get_db
 from app.models.profile import TransportistaProfile
-from app.models.user import User
-from app.schemas.perfil import TransportistaProfileRequest, TransportistaProfileResponse
+from app.models.user import User, UserStatus
+from app.models.vehiculo import Vehiculo
+from app.schemas.perfil import (
+    TransportistaProfileRequest,
+    TransportistaProfileResponse,
+    TransportistaPublicoResponse,
+)
 
 router = APIRouter(prefix="/transportistas", tags=["transportistas"])
+
+
+@router.get("/publico", response_model=list[TransportistaPublicoResponse])
+def listar_transportistas_publicos(
+    provincia: str | None = Query(None),
+    tipo_vehiculo: str | None = Query(None),
+    db: Session = Depends(get_db),
+):
+    query = (
+        db.query(TransportistaProfile, User)
+        .join(User, User.id == TransportistaProfile.user_id)
+        .filter(User.status == UserStatus.verificado)
+        .options(joinedload(TransportistaProfile.user_id))
+    )
+    if provincia:
+        query = query.filter(TransportistaProfile.provincia == provincia)
+
+    resultados = query.limit(40).all()
+
+    items = []
+    for perfil, user in resultados:
+        vehiculos = db.query(Vehiculo).filter(
+            Vehiculo.transportista_id == perfil.user_id,
+            Vehiculo.activo == True,
+        ).all()
+
+        if tipo_vehiculo and not any(v.tipo.value == tipo_vehiculo for v in vehiculos):
+            continue
+
+        items.append(
+            TransportistaPublicoResponse(
+                user_id=perfil.user_id,
+                nombre=user.nombre,
+                apellido=user.apellido,
+                ciudad=perfil.ciudad,
+                provincia=perfil.provincia,
+                radio_operacion_km=perfil.radio_operacion_km,
+                bio=perfil.bio,
+                rating_promedio=float(perfil.rating_promedio or 0),
+                cantidad_viajes=perfil.cantidad_viajes,
+                vehiculos=vehiculos,
+            )
+        )
+    return items
 
 
 @router.post("/profile", response_model=TransportistaProfileResponse, status_code=201)

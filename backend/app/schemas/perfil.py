@@ -4,6 +4,30 @@ from datetime import datetime, date
 from pydantic import BaseModel
 
 from app.models.profile import PersonaTipo
+from app.models.vehiculo import VehiculoTipo
+
+
+class VehiculoResumen(BaseModel):
+    model_config = {"from_attributes": True}
+    id: uuid.UUID
+    tipo: VehiculoTipo
+    capacidad_kg: int
+    refrigerado: bool
+    tiene_hidrogrua: bool
+
+
+class TransportistaPublicoResponse(BaseModel):
+    model_config = {"from_attributes": True}
+    user_id: uuid.UUID
+    nombre: str
+    apellido: str | None
+    ciudad: str | None
+    provincia: str | None
+    radio_operacion_km: int
+    bio: str | None
+    rating_promedio: float
+    cantidad_viajes: int
+    vehiculos: list[VehiculoResumen] = []
 
 
 class TransportistaProfileRequest(BaseModel):

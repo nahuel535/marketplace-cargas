@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link } from "react-router-dom";
-import { Truck } from "lucide-react";
+import { Truck, ArrowLeft, CheckCircle, Package } from "lucide-react";
 import api from "../../lib/api";
 
 const schema = z.object({
@@ -22,11 +22,13 @@ const ROLES = [
     value: "dador",
     label: "Dador de carga",
     desc: "Necesito transportar mercadería",
+    icon: Package,
   },
   {
     value: "transportista",
     label: "Transportista",
     desc: "Ofrezco servicio de transporte",
+    icon: Truck,
   },
 ] as const;
 
@@ -56,11 +58,13 @@ export default function Register() {
 
   if (ok) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="card max-w-md w-full text-center">
-          <div className="text-5xl mb-4">📬</div>
-          <h2 className="text-xl font-bold mb-2">¡Cuenta creada!</h2>
-          <p className="text-gray-600 mb-6">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="card max-w-md w-full text-center shadow-sm">
+          <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="w-7 h-7 text-green-600" />
+          </div>
+          <h2 className="font-display text-xl font-bold text-slate-900 mb-2">¡Cuenta creada!</h2>
+          <p className="text-gray-500 text-sm mb-6 leading-relaxed">
             Te enviamos un email para verificar tu cuenta. Revisá tu bandeja de entrada.
           </p>
           <Link to="/login" className="btn-primary">
@@ -72,37 +76,47 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors">
+          <ArrowLeft className="w-4 h-4" /> Volver al inicio
+        </Link>
+
         <div className="flex flex-col items-center mb-8">
-          <div className="bg-primary-600 p-3 rounded-xl mb-4">
-            <Truck className="w-8 h-8 text-white" />
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-primary-600 p-2 rounded-xl">
+              <Truck className="w-6 h-6 text-white" />
+            </div>
+            <span className="font-display font-bold text-2xl text-slate-900">FleteYa</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Crear cuenta</h1>
-          <p className="text-gray-500 mt-1">Marketplace de Cargas</p>
+          <p className="text-gray-500 text-sm">Creá tu cuenta gratis</p>
         </div>
 
-        <div className="card">
+        <div className="card shadow-sm">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Selector de rol */}
             <div>
               <label className="label">Soy...</label>
               <div className="grid grid-cols-2 gap-3">
-                {ROLES.map((r) => (
-                  <button
-                    key={r.value}
-                    type="button"
-                    onClick={() => setValue("rol", r.value)}
-                    className={`p-3 rounded-lg border-2 text-left transition-all ${
-                      rolSeleccionado === r.value
-                        ? "border-primary-600 bg-primary-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <p className="font-medium text-sm">{r.label}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{r.desc}</p>
-                  </button>
-                ))}
+                {ROLES.map((r) => {
+                  const Icon = r.icon;
+                  const isSelected = rolSeleccionado === r.value;
+                  return (
+                    <button
+                      key={r.value}
+                      type="button"
+                      onClick={() => setValue("rol", r.value)}
+                      className={`p-3.5 rounded-xl border-2 text-left transition-all cursor-pointer ${
+                        isSelected
+                          ? "border-primary-600 bg-primary-50"
+                          : "border-gray-200 hover:border-gray-300 bg-white"
+                      }`}
+                    >
+                      <Icon className={`w-4 h-4 mb-2 ${isSelected ? "text-primary-600" : "text-gray-400"}`} />
+                      <p className={`font-semibold text-sm ${isSelected ? "text-primary-700" : "text-gray-700"}`}>{r.label}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 leading-tight">{r.desc}</p>
+                    </button>
+                  );
+                })}
               </div>
               {errors.rol && <p className="error-msg">{errors.rol.message}</p>}
             </div>
@@ -152,7 +166,7 @@ export default function Register() {
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
                 {error}
               </div>
             )}
@@ -164,7 +178,7 @@ export default function Register() {
 
           <p className="text-center text-sm text-gray-500 mt-6">
             ¿Ya tenés cuenta?{" "}
-            <Link to="/login" className="text-primary-600 font-medium hover:underline">
+            <Link to="/login" className="text-primary-600 font-semibold hover:text-primary-700">
               Iniciá sesión
             </Link>
           </p>
