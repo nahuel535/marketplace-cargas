@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CheckCircle, ChevronRight, Truck, FileText, Car } from "lucide-react";
+import { CheckCircle, ChevronRight, Truck, FileText, Car, Plus, X, MapPin } from "lucide-react";
 import api from "../../lib/api";
 import { PROVINCIAS_AR, VEHICULO_TIPO_LABELS } from "../../lib/api-tipos";
 
@@ -74,6 +74,10 @@ export default function OnboardingTransportista() {
   const [vehiculoId, setVehiculoId] = useState<string | null>(null);
   const [docs, setDocs] = useState<Record<string, File>>({});
   const [tiposSeleccionados, setTiposSeleccionados] = useState<string[]>([]);
+  const [destinos, setDestinos] = useState<{ provincia: string; ciudad: string }[]>([]);
+  const [nuevoDestProv, setNuevoDestProv] = useState("");
+  const [nuevoDestCiudad, setNuevoDestCiudad] = useState("");
+  const [errorDestino, setErrorDestino] = useState("");
 
   const hint = getOnboardingHint();
 
@@ -94,6 +98,17 @@ export default function OnboardingTransportista() {
     },
   });
 
+  const agregarDestino = () => {
+    if (!nuevoDestProv) { setErrorDestino("Seleccioná una provincia"); return; }
+    if (!nuevoDestCiudad.trim()) { setErrorDestino("Ingresá una ciudad"); return; }
+    setErrorDestino("");
+    setDestinos(prev => [...prev, { provincia: nuevoDestProv, ciudad: nuevoDestCiudad.trim() }]);
+    setNuevoDestCiudad("");
+  };
+
+  const quitarDestino = (idx: number) =>
+    setDestinos(prev => prev.filter((_, i) => i !== idx));
+
   const toggleTipoContenido = (tipo: string) => {
     setTiposSeleccionados(prev =>
       prev.includes(tipo) ? prev.filter(t => t !== tipo) : [...prev, tipo]
@@ -105,7 +120,8 @@ export default function OnboardingTransportista() {
     try {
       const payload = {
         ...data,
-        tipos_contenido: tiposSeleccionados.join(", ") || data.tipos_contenido || null,
+        tipos_contenido: tiposSeleccionados.join(", ") || null,
+        recorridos_descripcion: destinos.length > 0 ? JSON.stringify(destinos) : null,
       };
       await api.post("/transportistas/profile", payload);
       sessionStorage.removeItem("onboarding_hint");
@@ -246,16 +262,61 @@ export default function OnboardingTransportista() {
                 <p className="text-xs text-gray-500 mt-1">Hasta dónde estás dispuesto a viajar desde tu ciudad</p>
               </div>
 
-              {/* Recorridos */}
+              {/* Destinos */}
               <div>
-                <label className="label">Recorridos que realizás</label>
-                <textarea
-                  {...perfilForm.register("recorridos_descripcion")}
-                  className="input-field"
-                  rows={3}
-                  placeholder="Ej: Córdoba → Buenos Aires, Rosario → Mendoza, interior de Córdoba. Describí las rutas y ciudades que cubrís habitualmente."
-                />
-                <p className="text-xs text-gray-500 mt-1">Incluí las ciudades y provincias que abarcás, más allá de tu radio de operación.</p>
+                <label className="label">Provincias y ciudades a las que viajás</label>
+
+                {/* Fila para agregar */}
+                <div className="flex gap-2 mt-1">
+                  <select
+                    value={nuevoDestProv}
+                    onChange={e => { setNuevoDestProv(e.target.value); setErrorDestino(""); }}
+                    className="input-field flex-1"
+                  >
+                    <option value="">Provincia</option>
+                    {PROVINCIAS_AR.map(p => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                  <input
+                    value={nuevoDestCiudad}
+                    onChange={e => { setNuevoDestCiudad(e.target.value); setErrorDestino(""); }}
+                    onKeyDown={e => e.key === "Enter" && (e.preventDefault(), agregarDestino())}
+                    className="input-field flex-1"
+                    placeholder="Ciudad"
+                  />
+                  <button
+                    type="button"
+                    onClick={agregarDestino}
+                    className="flex items-center gap-1 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-gray-900 font-bold text-sm rounded-xl transition-colors shrink-0"
+                  >
+                    <Plus className="w-4 h-4" /> Agregar
+                  </button>
+                </div>
+                {errorDestino && <p className="error-msg">{errorDestino}</p>}
+
+                {/* Lista de destinos agregados */}
+                {destinos.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {destinos.map((d, i) => (
+                      <span
+                        key={i}
+                        className="inline-flex items-center gap-1.5 text-sm bg-zinc-900 text-white pl-3 pr-2 py-1.5 rounded-full font-medium"
+                      >
+                        <MapPin className="w-3 h-3 text-primary-400 shrink-0" />
+                        {d.provincia} — {d.ciudad}
+                        <button
+                          type="button"
+                          onClick={() => quitarDestino(i)}
+                          className="ml-0.5 hover:text-red-400 transition-colors"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {destinos.length === 0 && (
+                  <p className="text-xs text-gray-400 mt-2">Agregá las provincias y ciudades que cubrís habitualmente.</p>
+                )}
               </div>
 
               {/* Tipo de contenido */}

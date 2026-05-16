@@ -12,7 +12,7 @@ const schema = z.object({
   nombre: z.string().min(2, "Nombre muy corto"),
   apellido: z.string().optional(),
   email: z.string().email("Email inválido"),
-  telefono: z.string().optional(),
+  telefono: z.string().min(6, "Ingresá tu teléfono"),
   password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
   provincia: z.string().min(2, "Seleccioná una provincia"),
   ciudad: z.string().min(2, "Ingresá tu ciudad"),
@@ -190,13 +190,14 @@ export default function RegisterTransportista() {
 
             {/* Teléfono */}
             <div>
-              <label className="label">Teléfono (opcional)</label>
+              <label className="label">Teléfono</label>
               <input
                 {...register("telefono")}
                 type="tel"
                 className="input-field"
                 placeholder="+54 11 1234-5678"
               />
+              {errors.telefono && <p className="error-msg">{errors.telefono.message}</p>}
             </div>
 
             {/* Ubicación */}
