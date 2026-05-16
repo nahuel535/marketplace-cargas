@@ -165,8 +165,8 @@ export default function OnboardingTransportista() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-2 mb-8">
-          <div className="bg-primary-600 p-2 rounded-lg">
-            <Truck className="w-5 h-5 text-white" />
+          <div className="bg-primary-500 p-2 rounded-lg">
+            <Truck className="w-5 h-5 text-gray-900" />
           </div>
           <span className="font-bold text-gray-900">RutaCarga</span>
         </div>
@@ -177,7 +177,7 @@ export default function OnboardingTransportista() {
             <div key={i} className="flex items-center flex-1">
               <div className={`flex items-center gap-2 ${i <= paso ? "text-primary-600" : "text-gray-400"}`}>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 ${
-                  i < paso ? "bg-primary-600 border-primary-600 text-white"
+                  i < paso ? "bg-primary-500 border-primary-500 text-gray-900"
                   : i === paso ? "border-primary-600 text-primary-600"
                   : "border-gray-300 text-gray-400"
                 }`}>
@@ -186,7 +186,7 @@ export default function OnboardingTransportista() {
                 <span className="text-sm font-medium hidden sm:block">{p.label}</span>
               </div>
               {i < PASOS.length - 1 && (
-                <div className={`flex-1 h-0.5 mx-3 ${i < paso ? "bg-primary-600" : "bg-gray-200"}`} />
+                <div className={`flex-1 h-0.5 mx-3 ${i < paso ? "bg-primary-500" : "bg-gray-200"}`} />
               )}
             </div>
           ))}
@@ -269,7 +269,7 @@ export default function OnboardingTransportista() {
                       onClick={() => toggleTipoContenido(tipo)}
                       className={`text-xs px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                         tiposSeleccionados.includes(tipo)
-                          ? "bg-primary-600 border-primary-600 text-white"
+                          ? "bg-primary-500 border-primary-500 text-gray-900 font-bold"
                           : "border-gray-300 text-gray-600 hover:border-primary-400 hover:text-primary-600"
                       }`}
                     >

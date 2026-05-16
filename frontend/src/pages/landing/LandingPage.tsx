@@ -67,8 +67,8 @@ export default function LandingPage() {
       <nav className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="bg-primary-600 p-1.5 rounded-lg">
-              <Truck className="w-5 h-5 text-white" />
+            <div className="bg-primary-500 p-1.5 rounded-lg">
+              <Truck className="w-5 h-5 text-gray-900" />
             </div>
             <span className="font-display font-bold text-gray-900 text-lg">RutaCarga</span>
           </div>
@@ -87,7 +87,7 @@ export default function LandingPage() {
             </Link>
             <Link
               to="/register/transportista"
-              className="text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-xl transition-colors"
+              className="text-sm font-bold bg-primary-500 hover:bg-primary-600 text-gray-900 px-4 py-2 rounded-xl transition-colors"
             >
               Soy transportista
             </Link>
@@ -185,7 +185,7 @@ export default function LandingPage() {
                 <button
                   onClick={buscar}
                   disabled={loading}
-                  className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors duration-200 disabled:opacity-60 cursor-pointer shrink-0"
+                  className="flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-gray-900 font-bold px-6 py-2.5 rounded-xl transition-colors duration-200 disabled:opacity-60 cursor-pointer shrink-0"
                 >
                   <Search className="w-4 h-4" />
                   Buscar
@@ -288,7 +288,7 @@ export default function LandingPage() {
               <div key={n} className="text-center">
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-50 mb-4 relative">
                   <Icon className="w-6 h-6 text-primary-600" />
-                  <span className="absolute -top-2 -right-2 w-6 h-6 bg-primary-600 text-white text-xs font-bold rounded-full flex items-center justify-center">{n.slice(1)}</span>
+                  <span className="absolute -top-2 -right-2 w-6 h-6 bg-primary-500 text-gray-900 text-xs font-bold rounded-full flex items-center justify-center">{n.slice(1)}</span>
                 </div>
                 <h3 className="font-display font-bold text-slate-900 text-lg mb-2">{title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
@@ -314,7 +314,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/register/transportista"
-              className="inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-gray-900 font-bold px-8 py-3.5 rounded-xl transition-colors"
             >
               Registrarme como transportista <ArrowRight className="w-4 h-4" />
             </Link>
@@ -344,8 +344,8 @@ export default function LandingPage() {
       <footer className="bg-slate-950 py-8">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="bg-primary-600 p-1 rounded-md">
-              <Truck className="w-4 h-4 text-white" />
+            <div className="bg-primary-500 p-1 rounded-md">
+              <Truck className="w-4 h-4 text-gray-900" />
             </div>
             <span className="font-display font-bold text-white text-sm">RutaCarga</span>
           </div>

@@ -70,8 +70,8 @@ export default function Register() {
 
         <div className="flex flex-col items-center mb-8">
           <div className="flex items-center gap-2 mb-2">
-            <div className="bg-primary-600 p-2 rounded-xl">
-              <Truck className="w-6 h-6 text-white" />
+            <div className="bg-primary-500 p-2 rounded-xl">
+              <Truck className="w-6 h-6 text-gray-900" />
             </div>
             <span className="font-display font-bold text-2xl text-slate-900">RutaCarga</span>
           </div>
