@@ -7,6 +7,23 @@ import { CheckCircle, ChevronRight, Truck, FileText, Car } from "lucide-react";
 import api from "../../lib/api";
 import { PROVINCIAS_AR, VEHICULO_TIPO_LABELS } from "../../lib/api-tipos";
 
+const TIPOS_CONTENIDO_OPCIONES = [
+  "Cargas generales",
+  "Granos y cereales",
+  "Alimentos y bebidas",
+  "Refrigerados / congelados",
+  "Materiales de construcción",
+  "Maquinaria y equipos",
+  "Electrodomésticos y electrónica",
+  "Ganado",
+  "Líquidos / cisterna",
+  "Áridos y minerales",
+  "Productos químicos",
+  "Residuos industriales",
+  "Mudanzas",
+  "Otro",
+];
+
 // ── Schemas ──────────────────────────────────────────────────────────────────
 const schemaPerfil = z.object({
   cuit: z.string().min(10, "CUIT inválido"),
@@ -16,6 +33,9 @@ const schemaPerfil = z.object({
   provincia: z.string().min(2, "Seleccioná una provincia"),
   radio_operacion_km: z.number().min(50).max(5000),
   bio: z.string().optional(),
+  recorridos_descripcion: z.string().optional(),
+  tipos_contenido: z.string().optional(),
+  especificaciones: z.string().optional(),
 });
 
 const schemaVehiculo = z.object({
@@ -38,23 +58,57 @@ const PASOS = [
   { label: "Documentos", icon: FileText },
 ];
 
+function getOnboardingHint() {
+  try {
+    const raw = sessionStorage.getItem("onboarding_hint");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function OnboardingTransportista() {
   const navigate = useNavigate();
   const [paso, setPaso] = useState(0);
   const [error, setError] = useState("");
   const [vehiculoId, setVehiculoId] = useState<string | null>(null);
   const [docs, setDocs] = useState<Record<string, File>>({});
+  const [tiposSeleccionados, setTiposSeleccionados] = useState<string[]>([]);
+
+  const hint = getOnboardingHint();
+
+  const tipoInicial = (() => {
+    if (!hint?.tipo_cuenta) return undefined;
+    if (hint.tipo_cuenta === "empresa") return "empresa";
+    return "particular";
+  })();
 
   // ── Paso 1: Perfil ────────────────────────────────────────────────────────
   const perfilForm = useForm<PerfilData>({
     resolver: zodResolver(schemaPerfil),
-    defaultValues: { radio_operacion_km: 500 },
+    defaultValues: {
+      radio_operacion_km: 500,
+      tipo: tipoInicial,
+      provincia: hint?.provincia ?? "",
+      ciudad: hint?.ciudad ?? "",
+    },
   });
+
+  const toggleTipoContenido = (tipo: string) => {
+    setTiposSeleccionados(prev =>
+      prev.includes(tipo) ? prev.filter(t => t !== tipo) : [...prev, tipo]
+    );
+  };
 
   const guardarPerfil = async (data: PerfilData) => {
     setError("");
     try {
-      await api.post("/transportistas/profile", data);
+      const payload = {
+        ...data,
+        tipos_contenido: tiposSeleccionados.join(", ") || data.tipos_contenido || null,
+      };
+      await api.post("/transportistas/profile", payload);
+      sessionStorage.removeItem("onboarding_hint");
       setPaso(1);
     } catch (e: any) {
       setError(e.response?.data?.detail ?? "Error al guardar perfil");
@@ -114,7 +168,7 @@ export default function OnboardingTransportista() {
           <div className="bg-primary-600 p-2 rounded-lg">
             <Truck className="w-5 h-5 text-white" />
           </div>
-          <span className="font-bold text-gray-900">Marketplace de Cargas</span>
+          <span className="font-bold text-gray-900">RutaCarga</span>
         </div>
 
         {/* Stepper */}
@@ -141,9 +195,10 @@ export default function OnboardingTransportista() {
         <div className="card">
           {/* ── PASO 1: PERFIL ── */}
           {paso === 0 && (
-            <form onSubmit={perfilForm.handleSubmit(guardarPerfil)} className="space-y-4">
+            <form onSubmit={perfilForm.handleSubmit(guardarPerfil)} className="space-y-5">
               <h2 className="text-lg font-bold mb-4">Completá tu perfil</h2>
 
+              {/* CUIT y tipo */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="label">CUIT</label>
@@ -151,7 +206,7 @@ export default function OnboardingTransportista() {
                   {perfilForm.formState.errors.cuit && <p className="error-msg">{perfilForm.formState.errors.cuit.message}</p>}
                 </div>
                 <div>
-                  <label className="label">Tipo</label>
+                  <label className="label">Tipo fiscal</label>
                   <select {...perfilForm.register("tipo")} className="input-field">
                     <option value="">Seleccioná...</option>
                     <option value="particular">Particular</option>
@@ -168,12 +223,8 @@ export default function OnboardingTransportista() {
                 <input {...perfilForm.register("razon_social")} className="input-field" placeholder="Tu empresa S.A." />
               </div>
 
+              {/* Ubicación */}
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="label">Ciudad</label>
-                  <input {...perfilForm.register("ciudad")} className="input-field" placeholder="Córdoba" />
-                  {perfilForm.formState.errors.ciudad && <p className="error-msg">{perfilForm.formState.errors.ciudad.message}</p>}
-                </div>
                 <div>
                   <label className="label">Provincia</label>
                   <select {...perfilForm.register("provincia")} className="input-field">
@@ -182,17 +233,71 @@ export default function OnboardingTransportista() {
                   </select>
                   {perfilForm.formState.errors.provincia && <p className="error-msg">{perfilForm.formState.errors.provincia.message}</p>}
                 </div>
+                <div>
+                  <label className="label">Ciudad</label>
+                  <input {...perfilForm.register("ciudad")} className="input-field" placeholder="Córdoba" />
+                  {perfilForm.formState.errors.ciudad && <p className="error-msg">{perfilForm.formState.errors.ciudad.message}</p>}
+                </div>
               </div>
 
               <div>
                 <label className="label">Radio de operación (km)</label>
                 <input {...perfilForm.register("radio_operacion_km", { valueAsNumber: true })} type="number" className="input-field" />
-                <p className="text-xs text-gray-500 mt-1">Hasta dónde estás dispuesto a viajar</p>
+                <p className="text-xs text-gray-500 mt-1">Hasta dónde estás dispuesto a viajar desde tu ciudad</p>
               </div>
 
+              {/* Recorridos */}
               <div>
-                <label className="label">Bio (opcional)</label>
-                <textarea {...perfilForm.register("bio")} className="input-field" rows={3} placeholder="Contá sobre tu experiencia..." />
+                <label className="label">Recorridos que realizás</label>
+                <textarea
+                  {...perfilForm.register("recorridos_descripcion")}
+                  className="input-field"
+                  rows={3}
+                  placeholder="Ej: Córdoba → Buenos Aires, Rosario → Mendoza, interior de Córdoba. Describí las rutas y ciudades que cubrís habitualmente."
+                />
+                <p className="text-xs text-gray-500 mt-1">Incluí las ciudades y provincias que abarcás, más allá de tu radio de operación.</p>
+              </div>
+
+              {/* Tipo de contenido */}
+              <div>
+                <label className="label">Tipo de contenido que transportás</label>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {TIPOS_CONTENIDO_OPCIONES.map(tipo => (
+                    <button
+                      key={tipo}
+                      type="button"
+                      onClick={() => toggleTipoContenido(tipo)}
+                      className={`text-xs px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
+                        tiposSeleccionados.includes(tipo)
+                          ? "bg-primary-600 border-primary-600 text-white"
+                          : "border-gray-300 text-gray-600 hover:border-primary-400 hover:text-primary-600"
+                      }`}
+                    >
+                      {tipo}
+                    </button>
+                  ))}
+                </div>
+                {tiposSeleccionados.length === 0 && (
+                  <p className="text-xs text-gray-400 mt-2">Seleccioná al menos un tipo de carga</p>
+                )}
+              </div>
+
+              {/* Especificaciones y requisitos */}
+              <div>
+                <label className="label">Especificaciones y requisitos para transportar</label>
+                <textarea
+                  {...perfilForm.register("especificaciones")}
+                  className="input-field"
+                  rows={4}
+                  placeholder="Ej: Carga paletizada con zunchos, máximo 1.200 kg por pallet. No se acepta carga suelta. Requiere remito del remitente. Descarga con apilador a cargo del destinatario."
+                />
+                <p className="text-xs text-gray-500 mt-1">Indicá condiciones de embalaje, manipulación, documentación requerida y cualquier restricción.</p>
+              </div>
+
+              {/* Bio */}
+              <div>
+                <label className="label">Descripción (opcional)</label>
+                <textarea {...perfilForm.register("bio")} className="input-field" rows={3} placeholder="Contá sobre tu experiencia, años en el rubro, zona de trabajo, etc." />
               </div>
 
               {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>}

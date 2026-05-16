@@ -81,6 +81,12 @@ export default function LandingPage() {
             </Link>
             <Link
               to="/register"
+              className="text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-300 px-4 py-2 rounded-xl transition-colors"
+            >
+              Busco transporte
+            </Link>
+            <Link
+              to="/register/transportista"
               className="text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-xl transition-colors"
             >
               Soy transportista
@@ -98,7 +104,7 @@ export default function LandingPage() {
               Marketplace de cargas Argentina
             </span>
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-5">
-              Encontrá el camión
+              Encontrá el transporte
               <span className="text-primary-500"> que necesitás</span>
             </h1>
             <p className="text-slate-400 text-lg mb-10 leading-relaxed">
@@ -300,14 +306,14 @@ export default function LandingPage() {
             Para transportistas
           </div>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
-            ¿Tenés camión? Conseguí más trabajo
+            ¿Tenés transporte? Conseguí más trabajo
           </h2>
           <p className="text-slate-400 text-lg mb-8 leading-relaxed">
             Registrá tu vehículo, verificá tu perfil y empezá a recibir cargas en tu zona.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/register"
+              to="/register/transportista"
               className="inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors"
             >
               Registrarme como transportista <ArrowRight className="w-4 h-4" />

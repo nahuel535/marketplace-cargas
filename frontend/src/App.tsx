@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/landing/LandingPage";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import RegisterTransportista from "./pages/auth/RegisterTransportista";
 import VerificarEmail from "./pages/auth/VerificarEmail";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/register/transportista" element={<RegisterTransportista />} />
         <Route path="/verificar-email" element={<VerificarEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />

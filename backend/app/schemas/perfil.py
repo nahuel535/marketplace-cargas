@@ -41,6 +41,9 @@ class TransportistaProfileRequest(BaseModel):
     ruta_vencimiento: date | None = None
     radio_operacion_km: int = 500
     bio: str | None = None
+    recorridos_descripcion: str | None = None
+    tipos_contenido: str | None = None
+    especificaciones: str | None = None
 
 
 class TransportistaProfileResponse(BaseModel):
@@ -54,6 +57,9 @@ class TransportistaProfileResponse(BaseModel):
     provincia: str | None
     radio_operacion_km: int
     bio: str | None
+    recorridos_descripcion: str | None
+    tipos_contenido: str | None
+    especificaciones: str | None
     rating_promedio: float
     cantidad_viajes: int
     suscripcion_activa: bool
