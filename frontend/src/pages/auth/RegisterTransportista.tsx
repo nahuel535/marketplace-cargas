@@ -81,7 +81,7 @@ export default function RegisterTransportista() {
           <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-7 h-7 text-green-600" />
           </div>
-          <h2 className="font-display text-xl font-bold text-slate-900 mb-2">¡Cuenta creada!</h2>
+          <h2 className="font-display text-xl font-bold text-zinc-900 mb-2">¡Cuenta creada!</h2>
           <p className="text-gray-500 text-sm mb-6 leading-relaxed">
             Te enviamos un email para verificar tu cuenta. Revisá tu bandeja de entrada y luego completá tu perfil.
           </p>
@@ -108,7 +108,7 @@ export default function RegisterTransportista() {
             <div className="bg-primary-500 p-2 rounded-xl">
               <Truck className="w-6 h-6 text-gray-900" />
             </div>
-            <span className="font-display font-bold text-2xl text-slate-900">RutaCarga</span>
+            <span className="font-display font-bold text-2xl text-zinc-900">RutaCarga</span>
           </div>
           <p className="text-gray-500 text-sm">Registrate como transportista</p>
         </div>

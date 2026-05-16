@@ -96,7 +96,7 @@ export default function LandingPage() {
       </nav>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="pt-16 bg-slate-900 overflow-hidden">
+      <section className="pt-16 bg-zinc-900 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 py-20 md:py-28">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-400 uppercase tracking-wider mb-4">
@@ -107,7 +107,7 @@ export default function LandingPage() {
               Encontrá el transporte
               <span className="text-primary-500"> que necesitás</span>
             </h1>
-            <p className="text-slate-400 text-lg mb-10 leading-relaxed">
+            <p className="text-zinc-400 text-lg mb-10 leading-relaxed">
               Conectamos dadores de carga con transportistas verificados en todo el país.
               Sin intermediarios, sin comisiones ocultas.
             </p>
@@ -146,7 +146,7 @@ export default function LandingPage() {
 
               {/* Fila destino */}
               <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <p className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5" /> Destino
                 </p>
                 <div className="grid grid-cols-2 gap-3">
@@ -209,7 +209,7 @@ export default function LandingPage() {
               { value: "100%", label: "Verificados" },
             ].map(s => (
               <div key={s.label}>
-                <p className="font-display text-3xl font-bold text-slate-900">{s.value}</p>
+                <p className="font-display text-3xl font-bold text-zinc-900">{s.value}</p>
                 <p className="text-sm text-gray-500 mt-0.5">{s.label}</p>
               </div>
             ))}
@@ -221,7 +221,7 @@ export default function LandingPage() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-baseline justify-between mb-8">
-            <h2 className="font-display text-2xl font-bold text-slate-900">
+            <h2 className="font-display text-2xl font-bold text-zinc-900">
               {buscado && !loading
                 ? transportistas.length > 0
                   ? `${transportistas.length} transportistas disponibles`
@@ -276,7 +276,7 @@ export default function LandingPage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-14">
-            <h2 className="font-display text-3xl font-bold text-slate-900 mb-3">¿Cómo funciona?</h2>
+            <h2 className="font-display text-3xl font-bold text-zinc-900 mb-3">¿Cómo funciona?</h2>
             <p className="text-gray-500 max-w-md mx-auto">Conectarte con un transportista es simple y rápido</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -290,7 +290,7 @@ export default function LandingPage() {
                   <Icon className="w-6 h-6 text-primary-600" />
                   <span className="absolute -top-2 -right-2 w-6 h-6 bg-primary-500 text-gray-900 text-xs font-bold rounded-full flex items-center justify-center">{n.slice(1)}</span>
                 </div>
-                <h3 className="font-display font-bold text-slate-900 text-lg mb-2">{title}</h3>
+                <h3 className="font-display font-bold text-zinc-900 text-lg mb-2">{title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
@@ -299,7 +299,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA TRANSPORTISTA ─────────────────────────────────────────── */}
-      <section className="bg-slate-900 py-20">
+      <section className="bg-zinc-900 py-20">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-2 bg-primary-600/20 text-primary-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
             <Truck className="w-3.5 h-3.5" />
@@ -308,7 +308,7 @@ export default function LandingPage() {
           <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
             ¿Tenés transporte? Conseguí más trabajo
           </h2>
-          <p className="text-slate-400 text-lg mb-8 leading-relaxed">
+          <p className="text-zinc-400 text-lg mb-8 leading-relaxed">
             Registrá tu vehículo, verificá tu perfil y empezá a recibir cargas en tu zona.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -331,7 +331,7 @@ export default function LandingPage() {
               { icon: Clock, text: "Activá en 24 horas" },
               { icon: CheckCircle, text: "Sin comisiones por viaje" },
             ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2 text-slate-400 text-sm">
+              <div key={text} className="flex items-center gap-2 text-zinc-400 text-sm">
                 <Icon className="w-4 h-4 text-primary-500" />
                 {text}
               </div>
@@ -341,7 +341,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── FOOTER ───────────────────────────────────────────────────── */}
-      <footer className="bg-slate-950 py-8">
+      <footer className="bg-zinc-950 py-8">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="bg-primary-500 p-1 rounded-md">
@@ -349,7 +349,7 @@ export default function LandingPage() {
             </div>
             <span className="font-display font-bold text-white text-sm">RutaCarga</span>
           </div>
-          <p className="text-slate-500 text-xs">© 2025 RutaCarga · Marketplace de cargas Argentina</p>
+          <p className="text-zinc-500 text-xs">© 2025 RutaCarga · Marketplace de cargas Argentina</p>
         </div>
       </footer>
     </div>
@@ -368,7 +368,7 @@ function TransportistaCard({ t, onContactar }: { t: TransportistaPublico; onCont
           {initials}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-slate-900 text-sm truncate">{t.nombre} {t.apellido}</p>
+          <p className="font-semibold text-zinc-900 text-sm truncate">{t.nombre} {t.apellido}</p>
           {t.ciudad && (
             <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
               <MapPin className="w-3 h-3" /> {t.ciudad}, {t.provincia}
